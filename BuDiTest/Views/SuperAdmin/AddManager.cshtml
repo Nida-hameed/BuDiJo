@@ -1,0 +1,108 @@
+﻿@model BuDiTest.Models.User
+@{
+    ViewData["Title"] = "Add Manager";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<div class="container">
+    <div class="col-md-12">
+        <div class="row">
+            <div class="col-md-8 offset-2">
+                <div class="card">
+                    <div class="card-body register-card-body">
+                        <p class="login-box-msg">Register a new Manager</p>
+
+                        <form asp-action="AddManager" method="post" enctype="multipart/form-data">
+                            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                            <label>First Name</label>
+                            <span asp-validation-for="FirstName" class="text-danger"></span>
+                            <div class="input-group mb-3">
+
+                                <input required asp-for="FirstName" placeholder="First Name" class="form-control" />
+                            </div>
+                            <label>Last Name</label>
+                            <span asp-validation-for="LastName" class="text-danger"></span>
+                            <div class="input-group mb-3">
+
+                                <input required asp-for="LastName" placeholder="Last Name" class="form-control" />
+
+                            </div>
+                            <label>Email</label>
+                            <span asp-validation-for="Email" class="text-danger"></span>
+                            <div class="input-group mb-3">
+
+                                <input required asp-for="Email" type="email" class="form-control" placeholder="User Email" />
+     
+                            </div>
+                            <label>Phone</label>
+                            <span asp-validation-for="MobileNumber" class="text-danger"></span>
+                            <div class="input-group mb-3">
+
+                                <input required asp-for="MobileNumber" type="number" class="form-control" placeholder="User Mobile" />
+
+                            </div>
+                            <label>Department</label>
+                            <span asp-validation-for="DepartmentID" class="text-danger"></span>
+                            <div class="input-group mb-3">
+                                @if (ViewBag.Department != null)
+                                {
+                                    <select asp-items=" ViewBag.Department" asp-for="DepartmentID" class="form-control" required>
+                                        <option disabled selected>Select Department</option>
+                                    </select>
+                                    <div class="input-group-append">
+                                        <div class="input-group-text">
+                                        </div>
+                                    </div>
+                                }
+                                else
+                                {
+                                    <p>First Need to Add Department <a asp-action="Index" asp-controller="Departments"> then you are able to create Employee</a></p>
+                                }
+                            </div>
+                            <label>Picture</label>
+                            <span asp-validation-for="ImgUrl" class="text-danger"></span>
+                            <div class="input-group mb-3">
+
+                                <input required asp-for="Picture" type="file" class="form-control" placeholder="User Image" />
+ 
+                            </div>
+                            <label>Password</label>
+                            <span asp-validation-for="Password" class="text-danger"></span>
+                            <div class="input-group mb-3">
+                                <input required asp-for="Password" type="password" required class="form-control" placeholder="Password" />
+   
+                            </div>
+                            <label>Confirm Password</label>
+                            <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+                            <div class="input-group mb-3">
+
+                                <input required asp-for="ConfirmPassword" type="password" required class="form-control" placeholder="Password" />
+
+                            </div>
+
+
+                            <div class="row">
+
+                                <div class="col-2">
+                                    <input type="submit" class="btn btn-warning" value="Add Manager" />
+                                </div>
+                                <div class="col-4">
+                                    <a class="btn btn-primary" asp-action="UserIndex">Back to Page</a>
+                                </div>
+                                <!-- /.col -->
+                            </div>
+                        </form>
+
+                    </div>
+                    <!-- /.form-box -->
+                </div><!-- /.card -->
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
+

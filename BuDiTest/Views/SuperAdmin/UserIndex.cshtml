@@ -1,0 +1,100 @@
+﻿@model IEnumerable<BuDiTest.Models.Admin>
+@{
+    ViewData["Title"] = "Managers List";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container-fluid">
+    <div class="col-md-12">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title" style="float: left">List of Managers</h3>
+                        <a asp-action="AddManager" style="float: right;" class="btn btn-primary btn-sm">Add New Manager</a>
+
+
+                    </div>
+                    <div class="card-body">
+                        <table id="UserDataTable" width="100%" class="table table-bordered table-striped">
+                            <thead>
+                                <tr>
+                                    <th>First Name</th>
+                                    <th>Last Name</th>
+                                    <th>Email</th>
+                                    <th>Mobile</th>
+                                    <th>Picture</th>
+                                    <th>Role</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model)
+                                {
+                                    <tr>
+                                        <td>@item.FirstName</td>
+                                        <td>@item.LastName</td>
+                                        <td>@item.Email</td>
+                                        <td>@item.Mobile</td>
+                                        <td><img src="~/UserImages/@item.Image" style="width:50px;height:50px;"/></td>
+                                        <td>@item.Role</td>
+                                        <td>
+                                            <a asp-action="EditManager" asp-controller="SuperAdmin" asp-route-id="@item.Id" class="btn btn-warning btn-sm"><i class="fa fa-edit"></i></a>
+                                            <a href="javascript:void(0)" onclick="Delete('@item.Id')" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></a>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts {
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <script>
+        $('#UserDataTable').DataTable({
+            autoWidth: false,
+            columnDefs: [
+                {
+                    targets: ['_all'],
+                    className: 'mdc-data-table__cell',
+                },
+            ],
+
+        });
+        function Delete(id) {
+            swal({
+                title: "Are you sure?",
+                text: "You will not be able to recover this imaginary file!",
+                type: "warning",
+                buttons: true,
+                dangerMode: true,
+            })
+                .then((willDelete) => {
+                    if (willDelete) {
+                        $.ajax({
+                            url: "/SuperAdmin/DeleteManager",
+                            type: "POST",
+                            data: {
+                                id: id
+                            },
+                            dataType: "json",
+                            success: function () {
+                                swal("Done!", "It was succesfully deleted!", "success");
+                                window.location.href = '../SuperAdmin/UserIndex';
+                            },
+                            error: function (xhr, ajaxOptions, thrownError) {
+                                swal("Error deleting!", "Please try again", "error");
+                            }
+                        });
+                    } else {
+                        swal("Your imaginary file is safe!");
+                    }
+                });
+        }
+    </script>
+}

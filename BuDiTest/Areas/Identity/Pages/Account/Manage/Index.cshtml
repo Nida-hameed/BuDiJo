@@ -1,0 +1,181 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Profile";
+    //ViewData["ActivePage"] = ManageNavPages.Index;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<style>
+    .preview-image-wrapper {
+        background: #fafbfc;
+        border: 1px solid rgba(195, 207, 216, .3);
+        display: inline-block;
+        height: 195px;
+        max-height: 195px;
+        max-width: 195px;
+        min-height: 195px;
+        min-width: 100%;
+        overflow: hidden;
+        position: relative;
+        text-align: center;
+        vertical-align: middle;
+        width: 100%;
+    }
+
+        .preview-image-wrapper img {
+            height: 195px;
+            max-width: 100%;
+        }
+
+    .btn_remove_image,
+    .btn_remove {
+        background: #ddd;
+        border-radius: 50% !important;
+        color: #000;
+        display: inline-block;
+        font-size: 18px;
+        height: 30px;
+        line-height: 30px;
+        position: absolute;
+        right: 5px;
+        text-align: center;
+        top: 5px;
+        width: 30px;
+    }
+
+    .image-box-actions a {
+        color: #337ab7 !important;
+        text-shadow: none !important;
+    }
+
+    #image_preview {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(160px, 160px));
+        width: 100%;
+        gap: 20px;
+    }
+
+    .image-box-actions {
+        text-align: center;
+        margin: 10px 0;
+    }
+
+        .image-box-actions a {
+            border: 1px solid #eee;
+            padding: 5px 20px;
+            text-transform: uppercase;
+            font-size: 14px;
+        }
+
+            .image-box-actions a:hover {
+                box-shadow: 1px 1px 180px #dc3545 inset;
+                color: #fff !important;
+            }
+
+</style>
+
+<!-- Main content -->
+<section class="content">
+    <div class="container-fluid">
+        <partial name="_StatusMessage" for="StatusMessage" />
+        <form id="profile-form" method="post" asp-area="Identity" asp-page="/Account/Manage/Index" enctype="multipart/form-data">
+            <div class="row">
+                <div class="col-md-3">
+                    <ul class="nav nav-pills flex-column">
+                        <li class="nav-item"><a class="nav-link @ManageNavPages.IndexNavClass(ViewContext)" id="profile" asp-page="./Index">Profile</a></li>
+                        <li class="nav-item"><a class="nav-link @ManageNavPages.ChangePasswordNavClass(ViewContext)" id="change-password" asp-page="./ChangePassword">Password</a></li>
+
+                    </ul>
+                </div>
+
+                <div class="col-md-8">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="tab-content">
+                                <input type="hidden" asp-for="Input.Id" />
+                                <div class="form-group row">
+                                    <label for="inputName" class="col-sm-2 col-form-label">FirstName</label>
+                                    <div class="col-sm-10">
+                                        <input asp-for="Input.FirstName" class="form-control" />
+                                        <span asp-validation-for="Input.FirstName" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label for="inputEmail" class="col-sm-2 col-form-label">LastName</label>
+                                    <div class="col-sm-10">
+                                        <input asp-for="Input.LastName" class="form-control" />
+                                        <span asp-validation-for="Input.LastName" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label for="inputName2" class="col-sm-2 col-form-label">Username</label>
+                                    <div class="col-sm-10">
+                                        <input asp-for="Username" class="form-control" readonly />
+                                        <span asp-validation-for="Input.Username" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label asp-for="Input.PhoneNumber" class="col-sm-2 form-label"></label>
+                                    <div class="col-sm-10">
+                                        <input asp-for="Input.PhoneNumber" class="form-control" />
+                                        <span asp-validation-for="Input.PhoneNumber" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <div class="image-box" style="width: 100%">
+                                        <input type="file" name="Upload" id="Upload" onchange="readURL(this);" style="display:none" />
+                                        <div class="preview-image-wrapper">
+                                            @{
+                                                var image = "";
+                                                if (!string.IsNullOrEmpty(Model.Input.ImgUrl))
+                                                {
+                                                    image = Model.Input.ImgUrl;
+                                                }
+                                                else
+                                                {
+                                                    image = "../../uploads/images.png";                 
+                                                }
+                                            }
+                                            <img src="~/UserImages/@image"
+                                                 alt="Preview image" id="preview_image" title="Remove image" width="150"
+                                                 data-default="~/UserImages/@image" />
+                                        </div>
+                                        <div class="image-box-actions">
+                                            <a href="javascript:void(0);" class="btn_gallery" onclick="$('#Upload').trigger('click');"
+                                               data-result="image" data-action="select-image" data-allow-thumb="1">
+                                                Choose image
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <div class="offset-sm-4 col-sm-8">
+                                        <button id="update-profile-button" type="submit" class="w-50 btn btn-lg btn-primary">Save</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</section>
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        function readURL(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+
+                reader.onload = function (e) {
+                    $('#preview_image')
+                        .attr('src', e.target.result)
+                        .width(150)
+                        .height(200);
+                };
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+    </script>
+}

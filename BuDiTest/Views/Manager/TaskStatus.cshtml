@@ -1,0 +1,41 @@
+﻿@model MyTask
+@{
+    ViewData["Title"] = "Task Status";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container">
+    <div class="col-md-12">
+        <div class="row">
+            <div class="col-md-8 offset-2">
+                <div class="card">
+                    <div class="card-body register-card-body">
+                        <form asp-action="TaskStatus" method="post">
+                            <input hidden asp-for="TaskID" />
+                            <label>Task Status</label>
+                            <span asp-validation-for="Status" class="text-danger"></span>
+                            <div class="input-group mb-3">
+                                <select asp-for="Status" class="form-control">
+                                    <option disabled selected>Select Status</option>
+                                    <option value="InProgress">In Progress</option>
+                                    <option value="Completed">Completed</option>
+                                </select>
+
+                            </div>
+                            <div class="row" style="padding-top:30px">
+                                <div class="col-3">
+                                    <input type="submit" class="btn btn-warning" value="Submit" />
+                                </div>
+                                <div class="col-4">
+                                    <a class="btn btn-primary" asp-action="OpenTasks">Back to Page</a>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <!-- /.form-box -->
+                </div><!-- /.card -->
+            </div>
+        </div>
+    </div>
+</div>
+

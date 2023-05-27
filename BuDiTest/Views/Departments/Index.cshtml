@@ -1,0 +1,96 @@
+﻿@model IEnumerable<BuDiTest.Models.Department>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+
+<div class="container">
+    <div class="col-md-12">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title" style="float: left">List of Department</h3>
+                        <a asp-action="Create" style="float: right;" class="btn btn-primary btn-sm">Add New Department</a>
+                    </div>
+                    <div class="card-body">
+                        <table id="DepartmetTable" width="100%" class="table table-bordered table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Department Name</th>
+
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model)
+                                {
+                                    <tr>
+                                        <td>@item.DepartmentName</td>
+                                        <td>
+                                            <a asp-action="Edit" asp-route-id="@item.DepartmentID" class="btn btn-warning btn-sm"><i class="fa fa-edit"></i></a>
+                                            <a href="javascript:void(0)" onclick="Delete(@item.DepartmentID)" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></a>
+
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts {
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <script>
+        $('#DepartmetTable').DataTable({
+            autoWidth: false,
+            columnDefs: [
+                {
+                    targets: ['_all'],
+                    className: 'mdc-data-table__cell',
+                },
+            ],
+
+        });
+
+        function Delete(id) {
+            swal({
+                title: "Are you sure?",
+                text: "You will not be able to recover this imaginary file!",
+                type: "warning",
+                buttons: true,
+                dangerMode: true,
+            })
+                .then((willDelete) => {
+                    if (willDelete) {
+                        $.ajax({
+                            url: "/Departments/DeleteConfirmed",
+                            type: "POST",
+                            data: {
+                                id: id
+                            },
+                            dataType: "json",
+                            success: function () {
+                                swal("Done!", "It was succesfully deleted!", "success");
+                                window.location.href = '../Departments/Index';
+                            },
+                            error: function (xhr, ajaxOptions, thrownError) {
+                                swal("Error deleting!", "Please try again", "error");
+                            }
+                        });
+                    } else {
+                        swal("Your imaginary file is safe!");
+                    }
+                });
+        }
+    </script>
+}

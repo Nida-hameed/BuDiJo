@@ -1,0 +1,20 @@
+
+        public ImageModel GetImageById(string name)
+        {
+            if (string.IsNullOrEmpty(name))
+            {
+                throw new ArgumentException("Name cannot be null or empty.");
+            }
+            var image = _context.Users
+                .Where(u => u.Email == name)
+                .Select(u => new ImageModel
+                {
+                    ProfileImage = u.ProfileImage ?? "images.png"
+                })
+                .FirstOrDefault();
+            return image;
+        }   
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            <img src="~/uploads/@ImageService.GetImageById(User.Identity.Name).ProfileImage" class="user-image" id="profile-image" alt="User Image">
+                            <span class="hidden-xs">@User.Identity.Name</span>
+                        </a>

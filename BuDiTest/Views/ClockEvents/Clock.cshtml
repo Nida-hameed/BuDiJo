@@ -1,0 +1,102 @@
+﻿
+
+@{
+    ViewData["Title"] = "Clock Event";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<style>
+    .clock-btn {
+        padding: 10px 20px;
+        background-color: #5F97F8;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        height: 150px;
+        width: 150px;
+        border-radius: 86px;
+        margin: 37px 0px;
+    }
+
+    .clock-heading {
+        font-size: 20px;
+        font-weight: 600;
+        margin-top: 20px;
+        margin-bottom: 0px;
+    }
+
+    .timeDisplay {
+        color: white;
+        font-weight: 600;
+        opacity: 0.8;
+    }
+
+    .clock-holder {
+        border-left: 1px solid lightgrey;
+        margin: 10px;
+    }
+
+    .ClockInTime {
+        position: absolute;
+        top: 15px;
+        left: 30px;
+    }
+
+    .ClockOutTime {
+        position: absolute;
+        bottom: 10px;
+        left: 30px;
+    }
+
+    .ClockInTime:before {
+        content: " ";
+        height: 18px;
+        width: 18px;
+        background-color: #5F97F8;
+        display: block;
+        position: absolute;
+        border-radius: 100px;
+        left: -19px;
+        top: 4px;
+    }
+
+    .ClockOutTime:before {
+        content: " ";
+        height: 18px;
+        width: 18px;
+        background-color: #5F97F8;
+        display: block;
+        position: absolute;
+        border-radius: 100px;
+        left: -20px;
+        bottom: 2px;
+    }
+</style>
+
+<div class="dashboards-row clearfix row m-2 justify-content-center">
+
+    <div class="col-md-4">
+        <div class="">
+            <div id="js-clock-in-out" class="card dashboard-icon-widget clock-in-out-card">
+                <div class="card-body  flex-direction-row mb-1 py-3 px-2">
+                    <div class="clock-holder">
+                        <p class="ClockInTime">Clock In Time <span id="ClockInTime"> 00:00:00</span></p>
+                        <div class="text-center">
+                            <button id="clockBtn" class="clock-btn shadow">
+                                <h1 class="clock-heading" id="clock-heading">
+                                    Clock In
+                                </h1>
+                                <p id="time" class="timeDisplay">00:00:00</p>
+                            </button>
+                        </div>
+                        <p class="ClockOutTime">Clock Out Time <span id="ClockOutTime"> 00:00:00</span></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+@section Scripts {
+    <script src="~/js/ClockEvent.js" asp-append-version="true" type="text/javascript"></script>
+}

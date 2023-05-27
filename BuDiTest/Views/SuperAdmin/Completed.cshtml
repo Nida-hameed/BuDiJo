@@ -1,0 +1,62 @@
+﻿@model IEnumerable<BuDiTest.Models.TaskIndex>
+@{
+    ViewData["Title"] = "Completed Tasks";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<a asp-action="NotStarted" asp-controller="SuperAdmin" class="btn btn-primary">Not Started</a>
+&nbsp;
+<a asp-action="OpenTasks" asp-controller="SuperAdmin" class="btn btn-primary">Open Tasks</a>
+
+<div class="container-fluid my-4">
+    <div class="table-responsive">
+        <table class="table table-striped table-bordered table-hover">
+            <thead class="thead-light">
+                <tr>
+                    <th>Name</th>
+                    <th>Due Date</th>
+                    <th>Description</th>
+                    <th>Assigned By</th>
+                    <th>Assigned To</th>
+                    <th>Attachment</th>
+                    <th>Status</th>
+                    <th>Priority</th>
+
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.TaskName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.DueDate)
+                        </td>
+                        <td>
+                            <a target="_blank" href="@Url.Action("TaskDetail","SuperAdmin",new{Id=item.TaskID})"><i class="bi bi-card-list"></i></a>
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.RaisedByEmployeeId)
+                        </td>  
+                        <td>
+                            @Html.DisplayFor(modelItem => item.AssignedToEmployeeId)
+                        </td>
+                        <td>
+                            @*<a target="_blank" href="@Url.Content(item.AttchmentName)"><i class="bi bi-download"></i></a>*@
+                            <a asp-action="GetTaskPdf" asp-route-id="@item.TaskID"><i class="bi bi-download"></i></a>
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Status)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Priority)
+                        </td>
+                       
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+

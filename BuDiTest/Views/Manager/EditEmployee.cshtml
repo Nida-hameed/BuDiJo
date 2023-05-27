@@ -1,0 +1,68 @@
+﻿@model BuDiTest.Models.User
+@{
+    ViewData["Title"] = "Edit Employee";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container">
+    <div class="col-md-12">
+        <div class="row">
+            <div class="col-md-8 offset-2">
+                <div class="card">
+                    <div class="card-body register-card-body">
+                        <input type="hidden" asp-for="UserId" />
+
+                        <form asp-action="EditEmployee" method="post" asp-route-returnUrl="ReturnUrl">
+                            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                            <label>First Name</label>
+                            <span asp-validation-for="FirstName" class="text-danger"></span>
+                            <div class="input-group mb-3">
+                                <input asp-for="FirstName" placeholder="First Name" class="form-control" />
+                            </div>
+                            <label>Last Name</label>
+                            <span asp-validation-for="LastName" class="text-danger"></span>
+                            <div class="input-group mb-3">
+
+                                <input asp-for="LastName" placeholder="Last Name" class="form-control" />
+                            </div>
+                            <label>Email Name</label>
+                            <span asp-validation-for="Email" class="text-danger"></span>
+                            <div class="input-group mb-3">
+
+                                <input asp-for="Email" type="email" class="form-control" placeholder="User Email" readonly />
+                       
+                            </div>
+                            <label>Phone Name</label>
+                            <span asp-validation-for="MobileNumber" class="text-danger"></span>
+                            <div class="input-group mb-3">
+
+                                <input asp-for="MobileNumber" type="number" class="form-control" placeholder="User Mobile" />
+                          
+                            </div>
+
+
+
+                            <div class="row">
+
+                                <div class="col-2">
+                                    <input type="submit" class="btn btn-warning" value="Edit Employee" />
+                                </div>
+                                <div class="col-4">
+                                    <a class="btn btn-primary" asp-action="EmployeeIndex">Back to Page</a>
+                                </div>
+                                <!-- /.col -->
+                            </div>
+                        </form>
+
+                    </div>
+                    <!-- /.form-box -->
+                </div><!-- /.card -->
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
+

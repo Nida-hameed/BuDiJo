@@ -1,0 +1,121 @@
+﻿@using BuDiTest.Services;
+@using Microsoft.AspNetCore.Identity
+@using BuDiTest.Areas.Identity.Data
+@inject GetData GetData
+
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+@{
+    ViewData["Title"] = "Home";
+    Layout = "~/Views/Shared/_Layout.cshtml"; 
+}
+<div>
+
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card mb-3">
+                    <div class="card-header">
+                        <h5 class="text-center">
+                            @{
+                                string name = "";
+                                var user = GetData.GetUserByEmail(UserManager.GetUserName(User));
+                                name = string.Format("{0} {1}", user.FirstName, user.LastName);
+                            }
+                            Welcome @name to the Manager Dashboard
+                        </h5>
+                    </div>
+                </div>
+            </div>
+        </div>
+      
+
+    </div>
+</div>
+
+
+<div class="dashboard-sections">
+    <div class="row">
+        <div class="col-lg-3 col-md-6">
+            <div class="dashboard-section section-1">
+                <div class="sections-icons">
+                    <i class="fa fa-file-code-o"></i>
+                </div>
+                <div class="Section_labels">
+                    <h1>Total Tickets</h1>
+                    <h6>@ViewBag.TotalTickets</h6>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6">
+            <div class="dashboard-section section-2">
+                <div class="sections-icons">
+                    <i class="fa fa-file-code-o"></i>
+                </div>
+                <div class="Section_labels">
+                    <h1>Solved Tickets</h1>
+                    <h6>@ViewBag.SolvedTickets</h6>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6">
+            <div class="dashboard-section section-3">
+                <div class="sections-icons">
+                    <i class="fa fa-file-code-o"></i>
+                </div>
+                <div class="Section_labels">
+                    <h1>Pending Tickets</h1>
+                    <h6>@ViewBag.PendingTickets</h6>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6">
+            <div class="dashboard-section section-4">
+                <div class="sections-icons">
+                    <i class="fa fa-file-code-o"></i>
+                </div>
+                <div class="Section_labels">
+                    <h1>Personal Solving</h1>
+                    <h6>@ViewBag.PersonalSolving</h6>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="chart-area">
+    <div>
+        <h1 class="page-sub-title">Area Chart</h1>
+    </div>
+    <div>
+        <div id="chartContainer" style="height: 300px; width: 100%;"></div>
+    </div>
+</div>
+
+
+
+    @section Scripts {
+    <script src="https://cdn.canvasjs.com/jquery.canvasjs.min.js"></script>
+    <script>
+        window.onload = function () {
+            var options = {
+                title: {
+                    text: "Tickets"
+                },
+                animationEnabled: true,
+                exportEnabled: true,
+                data: [
+                    {
+                        type: "spline",
+                        dataPoints: [
+                            { label: "Total Tickets", y: @ViewBag.TotalTickets },
+                            { label: "Pending Tickets", y: @ViewBag.PendingTickets },
+                            { label: "Solved Tickets", y: @ViewBag.SolvedTickets },
+                            { label: "Personal Solving", y: @ViewBag.PersonalSolving }
+                        ]
+                    }
+                ]
+            };
+            $("#chartContainer").CanvasJSChart(options);
+        }
+    </script>
+}

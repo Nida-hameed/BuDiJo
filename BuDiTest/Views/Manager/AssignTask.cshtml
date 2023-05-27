@@ -1,0 +1,125 @@
+﻿@model MyTask
+@{
+    ViewData["Title"] = "Assign Task";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<style>
+    .select2-container .select2-selection--single {
+        height: 43px !important
+    }
+
+        .select2-container .select2-selection--single .select2-selection__rendered {
+            padding-left: 0px !important;
+        }
+</style>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
+
+<div class="container">
+    <div class="col-md-12">
+        <div class="row">
+            <div class="col-md-8 offset-2">
+                <div class="card">
+                    <div class="card-body register-card-body">
+                        <form asp-action="AssignTask" method="post" enctype="multipart/form-data">
+                            <label>Name</label>
+                            <span asp-validation-for="TaskName" class="text-danger"></span>
+                            <div class="input-group mb-3">
+                                <input asp-for="TaskName" type="text" class="form-control" placeholder="Task Name" />
+                               
+                            </div>
+                            <label>Description</label>
+                            <span asp-validation-for="Description" class="text-danger"></span>
+                            <div class="input-group mb-3">
+                                <textarea asp-for="Description" required class="form-control" placeholder="Description"></textarea>                                
+                             
+                            </div>
+                            <label>Due Date</label>
+                            <span asp-validation-for="DueDate" class="text-danger"></span>
+                            <div class="input-group mb-3">
+                                <input asp-for="DueDate" type="date" class="form-control" placeholder="Due Date" />
+                              
+                            </div>
+                             <label>Priority</label>
+                            <span asp-validation-for="Priority" class="text-danger"></span>
+                            <div class="input-group mb-3">
+                                <select asp-for="Priority" class="form-control">
+                                    <option disabled selected>Select Priority</option>
+                                    <option value="High">High</option>
+                                    <option value="Medium">Medium</option>
+                                    <option value="Low">Low</option>
+                                </select>
+                             
+                            </div>
+                            <label>Select Employee</label>
+                            <span asp-validation-for="AssignedToEmployeeId" class="text-danger"></span>
+                            <select class="select2" id="mySelect" asp-for="AssignedToEmployeeId" style="width: 100%">
+                                @if (ViewBag.UsersWithPictures != null)
+                                {
+                                    foreach (var user in ViewBag.UsersWithPictures)
+                                    {
+                                        <option value="@user.Id" data-image="@user.PicturePath">
+                                            @user.FullName
+                                        </option>
+                                    }
+                                }
+                            </select>
+                            <label>Attachment</label>
+                            <span asp-validation-for="Attachments" class="text-danger"></span>
+                            <div class="input-group mb-3">
+                                <input asp-for="Attachments" type="file" class="form-control" placeholder="Attachments" />
+                              
+                            </div>
+                            <div class="row" style="padding-top:30px">
+                                <div class="col-3">
+                                    <input type="submit" class="btn btn-warning" value="Assign" />
+                                </div>
+                                <div class="col-4">
+                                    <a class="btn btn-primary" asp-action="Index">Back to Page</a>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <!-- /.form-box -->
+                </div><!-- /.card -->
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('.select2').select2({
+                templateResult: function (data) {
+                    if (!data.element) {
+                        return data.text;
+                    }
+                    var $element = $(data.element);
+                    var $wrapper = $('<span></span>');
+                    var $image = $('<img>');
+                    $image.attr('src', $element.data('image'));
+                    $image.attr('width', '30px');
+                    $image.attr('height', '30px');
+                    $wrapper.append($image);
+                    $wrapper.append(' ' + data.text);
+                    return $wrapper;
+                },
+                templateSelection: function (data) {
+                    if (!data.element) {
+                        return data.text;
+                    }
+                    var $element = $(data.element);
+                    var $wrapper = $('<span></span>');
+                    var $image = $('<img>');
+                    $image.attr('src', $element.data('image'));
+                    $image.attr('width', '30px');
+                    $image.attr('height', '30px');
+                    $wrapper.append($image);
+                    $wrapper.append(' ' + data.text);
+                    return $wrapper;
+                }
+            });
+        });
+    </script>
+}

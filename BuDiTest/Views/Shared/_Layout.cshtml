@@ -1,0 +1,392 @@
+﻿@using BuDiTest.Services;
+
+@inject GetData GetData;
+
+@{
+    var notifications = Context.Items["Notifications"] as List<Notification>;
+}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- custom styling -->
+    <link rel="stylesheet" href="~/admin/assets/css/style.css">
+    <!-- bootstrap  -->
+    <link rel="stylesheet" href="~/admin/assets/css/bootstrap.min.css">
+    <!-- icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <!-- fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@100;300;400;700;900&display=swap" rel="stylesheet">
+
+    <!-- DataTables -->
+    <link rel="stylesheet" href="~/Admin/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
+    <link rel="stylesheet" href="~/Admin/plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
+    <link rel="stylesheet" href="~/Admin/plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
+
+    <title>Document</title>
+
+    <script>
+        window.addEventListener('DOMContentLoaded', () => {
+            document.getElementById("loader").style.display = 'none'
+        })
+    </script>
+</head>
+
+<body>
+
+    <div class="loader" id="loader">
+        <div class='circle'>
+            <div class='pier'></div>
+            <div class='pier'></div>
+            <div class='pier'></div>
+            <div class='pier'></div>
+            <div class='pier'></div>
+        </div>
+    </div>
+    <div class="sidebar open-bar">
+        <div class="sidebar-wrap">
+            <div>
+                <i class="fa fa-times close-icon-mobile"></i>
+            </div>
+            <div class="logo">
+                <img src="~/admin/assets/media/images/Logo.png" class="desktop-Logo" height="80" alt="">
+                <img src="~/admin/assets/media/images/logo-mobile.png" class="mobile-logo" height="45px" alt="">
+            </div>
+            <ul class="ul" id="myUL">
+                @if (User.IsInRole("SuperAdmin"))
+                {
+                    <li class="active">
+                        <a asp-action="Index" asp-controller="SuperAdmin"><img src="~/admin/assets/media/images/nav_icon/dashboard.png" class="sidenav-icon" alt=""><span> Dashboard</span></a>
+                    </li>
+                    <li>
+                        <a asp-action="UserIndex" asp-controller="SuperAdmin"><img src="~/admin/assets/media/images/nav_icon/manage_emp.png" class="sidenav-icon" alt=""><span>Manage Managers</span> </a>
+                    </li>
+                    <li>
+                        <a asp-action="EmployeeIndex" asp-controller="SuperAdmin"><img src="~/admin/assets/media/images/nav_icon/manage_emp.png" class="sidenav-icon" alt=""><span>Manage Employees</span> </a>
+                    </li>
+                    <li>
+                        <a asp-action="Index" asp-controller="Departments"><img src="~/admin/assets/media/images/nav_icon/manage_emp.png" class="sidenav-icon" alt=""><span>Manage Departments</span> </a>
+                    </li>
+                    <li>
+                        <a asp-action="OpenTickets" asp-controller="SuperAdmin"><img src="~/admin/assets/media/images/nav_icon/tickets.png" class="sidenav-icon" alt=""><span>Open Tickets</span></a>
+                    </li>
+                    <li>
+                        <a asp-action="OpenTasks" asp-controller="SuperAdmin"><img src="~/admin/assets/media/images/nav_icon/assign_task.png" class="sidenav-icon" alt=""><span>Open Tasks</span></a>
+                    </li>
+                    <li>
+                        <a asp-action="Report" asp-controller="Reports"><img src="~/admin/assets/media/images/nav_icon/reports.png" class="sidenav-icon" alt=""><span>Reports</span></a>
+                    </li>
+                    <li>
+                        <a asp-area="Identity" asp-page="/Account/Manage/Index" id="ProfileTab"><img src="~/admin/assets/media/images/nav_icon/profile.png" class="sidenav-icon" alt=""><span>Profile</span></a>
+                    </li>
+                }
+                else if (User.IsInRole("Manager"))
+                {
+                    <li class="active">
+                        <a asp-action="Index" asp-controller="Manager"><img src="~/admin/assets/media/images/nav_icon/dashboard.png" class="sidenav-icon" alt=""><span> Dashboard</span></a>
+                    </li>
+                    <li>
+                        <a asp-action="Clock" asp-controller="ClockEvents"><img src="~/admin/assets/media/images/nav_icon/Clock.png" class="sidenav-icon" alt=""><span>ClockIn</span></a>
+                    </li>
+                    <li>
+                        <a asp-action="EmployeeIndex" asp-controller="Manager"><img src="~/admin/assets/media/images/nav_icon/manage_emp.png" class="sidenav-icon" alt=""><span>Manage Employees</span> </a>
+                    </li>
+                    <li>
+                        <a asp-action="AssignedTo" asp-controller="Manager"><img src="~/admin/assets/media/images/nav_icon/tickets.png" class="sidenav-icon" alt=""><span>Assign Ticket</span></a>
+                    </li> 
+                    <li>
+                        <a asp-action="Tickets" asp-controller="Manager"><img src="~/admin/assets/media/images/nav_icon/tickets.png" class="sidenav-icon" alt=""><span>My Ticket</span></a>
+                    </li>
+                    <li>
+                        <a asp-action="OpenTickets" asp-controller="Manager"><img src="~/admin/assets/media/images/nav_icon/tickets.png" class="sidenav-icon" alt=""><span>Open Tickets</span></a>
+                    </li>
+                    <li>
+                        <a asp-action="OpenTasks" asp-controller="Manager"><img src="~/admin/assets/media/images/nav_icon/assign_task.png" class="sidenav-icon" alt=""><span>Open Tasks</span></a>
+                    </li>
+                    <li>
+                        <a asp-action="assignTask" asp-controller="Manager"><img src="~/admin/assets/media/images/nav_icon/assign_task.png" class="sidenav-icon" alt=""><span>Assign Tasks</span></a>
+                    </li>
+
+                    <li>
+                        <a asp-action="Index" asp-controller="Reports"><img src="~/admin/assets/media/images/nav_icon/reports.png" class="sidenav-icon" alt=""><span>Reports</span></a>
+                    </li>
+                    <li>
+                        <a asp-area="Identity" asp-page="/Account/Manage/Index" id="ProfileTab"><img src="~/admin/assets/media/images/nav_icon/profile.png" class="sidenav-icon" alt=""><span>Profile</span></a>
+                    </li>
+
+                }
+                else if (User.IsInRole("Employee"))
+                {
+                    <li class="active">
+                        <a asp-action="Index" asp-controller="Employe"><img src="~/admin/assets/media/images/nav_icon/dashboard.png" class="sidenav-icon" alt=""><span> Dashboard</span></a>
+                    </li>
+                    <li>
+                        <a asp-action="Clock" asp-controller="ClockEvents"><img src="~/admin/assets/media/images/nav_icon/Clock.png" class="sidenav-icon" alt=""><span>ClockIn</span></a>
+                    </li>
+                    <li>
+                        <a asp-action="Tasks" asp-controller="Employe"><img src="~/admin/assets/media/images/nav_icon/assign_task.png" class="sidenav-icon" alt=""><span>My Tasks</span></a>
+                    </li>
+                    <li>
+                        <a asp-action="Tickets" asp-controller="Employe"><img src="~/admin/assets/media/images/nav_icon/tickets.png" class="sidenav-icon" alt=""><span>My Tickets</span></a>
+                    </li>
+                    <li>
+                        <a asp-action="OpenTickets" asp-controller="Employe"><img src="~/admin/assets/media/images/nav_icon/tickets.png" class="sidenav-icon" alt=""><span>Open Tickets</span></a>
+                    </li>
+                    <li>
+                        <a asp-action="AssignedTo" asp-controller="Employe"><img src="~/admin/assets/media/images/nav_icon/tickets.png" class="sidenav-icon" alt=""><span>Assign Ticket</span></a>
+                    </li>
+                    <li>
+                        <a asp-area="Identity" asp-page="/Account/Manage/Index" id="ProfileTab"><img src="~/admin/assets/media/images/nav_icon/profile.png" class="sidenav-icon" alt=""><span>Profile</span></a>
+                    </li>
+                }
+
+            </ul>
+        </div>
+    </div>
+
+    <div class="content-wrapper body close-body">
+        <div class="content">
+            <div class="content-wrap">
+                <div class="col-md-12">
+                    <div class="sreach-place">
+                        <div class="search-bar">
+                            <i class="fa fa-search"></i>
+                            <input type="text" class="search-input" id="myInput" onkeyup="Menu_filter()" placeholder="Search in BudiJo">
+                        </div>
+                        <br>
+                        <div class="icons-area">
+                            <div class="notification">
+                                <img src="~/admin/assets/media/images/notification.png" alt="">
+                            </div>
+                            <!-- Modal -->
+                            <div id="notificationModal" class="modal">
+                                <div class="modal-content">
+                                    <span class="close">&times;</span>
+                                    <h3>Notifications</h3>
+                                    <div id="notificationList">
+                                        <!-- Notifications will be dynamically added here -->
+                                    </div>
+                                    <p id="noNotificationMsg">No new notifications.</p>
+                                </div>
+                            </div>
+                            <div class="Profile-section">
+                                <div class="profile-img-wrap">
+                                    <img src="~/UserImages/@GetData.GetImageById(User.Identity.Name).ProfileImage" class="user-image" id="profile-image" alt="User Image">
+                                </div>
+                                <div class="profile-wrap">
+                                    <i class="fa fa-chevron-down" id="dropdown-icon"></i>
+                                </div>
+                                <div class="dropdown-content shadow border" style="display: none;">
+                                    <a id="manage" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage" class="btn btn-sm btn-primary w-100 mb-2">Profile</a>
+                                    <form id="logoutForm" class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
+                                        <button id="logout" type="submit" class="btn btn-sm btn-danger w-100">Logout</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="page-title-section">
+                    <div class="page-title-inner">
+                        <div>
+                            <i class="fa fa-bars open nav-icon" id="icon"></i>
+                        </div>
+                        <div>
+                            <h1 class="page-title">@ViewData["Title"]</h1>
+                        </div>
+                    </div>
+                </div>
+
+                @RenderBody()
+            </div>
+        </div>
+    </div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+    <!-- DataTables  & Plugins -->
+    <script src="~/Admin/plugins/datatables/jquery.dataTables.min.js"></script>
+    <script src="~/Admin/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
+    <script src="~/Admin/plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
+    <script src="~/Admin/plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
+    <script src="~/Admin/plugins/datatables-buttons/js/dataTables.buttons.min.js"></script>
+    <script src="~/Admin/plugins/datatables-buttons/js/buttons.bootstrap4.min.js"></script>
+    <script src="~/Admin/plugins/jszip/jszip.min.js"></script>
+    <script src="~/Admin/plugins/pdfmake/pdfmake.min.js"></script>
+    <script src="~/Admin/plugins/pdfmake/vfs_fonts.js"></script>
+    <script src="~/Admin/plugins/datatables-buttons/js/buttons.html5.min.js"></script>
+    <script src="~/Admin/plugins/datatables-buttons/js/buttons.print.min.js"></script>
+    <script src="~/Admin/plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
+
+
+    <script src="~/admin/assets/js/bootstrap.min.js"></script>
+
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <script>
+        $(document).ready(function () {
+
+            $(".ul li a").click(function () {
+                $(".ul li").siblings("").removeClass("active")
+                $(this).parent().addClass("active")
+            })
+            $(".nav-icon").off("click").on("click", function () {
+                if ($(this).hasClass("open")) {
+                    $(this).toggleClass("close-nav").removeClass("open");
+                    $(".sidebar").addClass("close-bar").removeClass("open-bar");
+                    $(".body").addClass("open-body").removeClass("close-body");
+                    // $(".sidebar").css({ "width": "80px", "padding": "10px" });
+                    // $(".body").css({ "margin-left": "80px" });
+                    // $("li a").css({ "display": "none" });
+                } else if ($(this).hasClass("close-nav")) {
+                    $(this).toggleClass("open").removeClass("close-nav");
+                    $(".sidebar").addClass("open-bar").removeClass("close-bar");
+                    $(".body").addClass("close-body").removeClass("open-body");
+                    // $(".sidebar").css({ "width": "250px", "padding": "10px" });
+                    // $(".body").css({ "margin-left": "250px" });
+                    // $("li a").css({ "display": "inline-block" });
+                }
+            });
+            $(".close-icon-mobile").click(function () {
+                $(".nav-icon").toggleClass("close-nav").removeClass("open");
+                $(".sidebar").addClass("close-bar").removeClass("open-bar");
+                $(".body").addClass("open-body").removeClass("close-body");
+            })
+
+        })
+    </script>
+    <script>
+        var dropdownIcon = document.getElementById("dropdown-icon");
+        var dropdownContent = document.querySelector(".dropdown-content");
+        // Event listener for the dropdown icon
+        dropdownIcon.addEventListener("click", function () {
+            if (dropdownContent.style.display === "none") {
+                dropdownContent.style.display = "block"; // Show the dropdown content
+            } else {
+                dropdownContent.style.display = "none"; // Hide the dropdown content
+            }
+        });
+        // Event listener for the document body
+        document.body.addEventListener("click", function (event) {
+            // Check if the clicked element is outside the dropdown
+            if (!dropdownContent.contains(event.target) && event.target !== dropdownIcon) {
+                dropdownContent.style.display = "none"; // Hide the dropdown content
+            }
+        });
+
+       // menu filter scripts
+
+        function Menu_filter() {
+            // Declare variables
+            var input, filter, ul, li, a, i, txtValue;
+            input = document.getElementById('myInput');
+            filter = input.value.toUpperCase();
+            ul = document.getElementById("myUL");
+            li = ul.getElementsByTagName('li');
+            // Loop through all list items, and hide those who don't match the search query
+            for (i = 0; i < li.length; i++) {
+                a = li[i].getElementsByTagName("a")[0];
+                txtValue = a.textContent || a.innerText;
+                if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                    li[i].style.display = "";
+                } else {
+                    li[i].style.display = "none";
+                }
+            }
+        }
+
+    </script>
+    <script>
+        const notificationIcon = document.querySelector('.notification');
+        const modal = document.getElementById('notificationModal');
+        const closeBtn = document.querySelector('.close');
+        const notificationList = document.getElementById('notificationList');
+        const noNotificationMsg = document.getElementById('noNotificationMsg');
+
+        // Get notifications from server-side loop
+        const notifications = [
+        @foreach (var notification in notifications)
+        {
+            <text>{ NotificationId: @notification.NotificationId, Message: '@notification.Message' }, </text>
+        }
+        ];
+
+        notificationIcon.addEventListener('click', function () {
+            modal.style.display = 'block';
+            showNotifications();
+        });
+
+        closeBtn.addEventListener('click', function () {
+            modal.style.display = 'none';
+        });
+
+        window.addEventListener('click', function (event) {
+            if (event.target === modal) {
+                modal.style.display = 'none';
+            }
+        });
+
+        function showNotifications() {
+            if (notifications.length > 0) {
+                noNotificationMsg.style.display = 'none';
+                notificationList.innerHTML = '';
+                notifications.forEach(notification => {
+                    const listItem = document.createElement('li');
+                    listItem.id = `notification-${notification.NotificationId}`;
+                    listItem.style.backgroundColor = '#f5f5f5';
+                    listItem.style.padding = '5px';
+                    listItem.style.marginBottom = '5px';
+                    listItem.style.borderRadius = '5px';
+                    listItem.style.border = '1px solid #ddd';
+                    listItem.style.display = 'flex';
+                    listItem.style.justifyContent = 'space-between';
+                    listItem.style.marginTop = '5px';
+
+                    const span = document.createElement('span');
+                    span.style.flexGrow = '1';
+                    span.style.fontSize = '14px';
+                    span.textContent = notification.Message;
+
+                    const markAsReadLink = document.createElement('a');
+                    markAsReadLink.href = 'javascript:void(0);';
+                    markAsReadLink.onclick = function () {
+                        markAsRead(notification.NotificationId);
+                    };
+                    markAsReadLink.style.textDecoration = 'none';
+                    markAsReadLink.style.padding = '3px 8px';
+                    markAsReadLink.style.borderRadius = '3px';
+                    markAsReadLink.style.fontSize = '12px';
+                    markAsReadLink.textContent = 'Mark as Read';
+
+                    listItem.appendChild(span);
+                    listItem.appendChild(markAsReadLink);
+                    notificationList.appendChild(listItem);
+                });
+            } else {
+                noNotificationMsg.style.display = 'block';
+            }
+        }
+
+        function markAsRead(notificationId) {
+            $.post('/Home/MarkAsRead', { notificationId: parseInt(notificationId) })
+                .done(function (data) {
+                    console.log("Notification marked as read");
+                    $("#notification-" + notificationId).remove();
+                    updateNotifications();
+                })
+                .fail(function (error) {
+                    console.error("Failed to mark notification as read:", error);
+                });
+        }
+        function updateNotifications() {
+         
+        }
+
+          </script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+
+</html>

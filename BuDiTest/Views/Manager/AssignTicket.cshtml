@@ -1,0 +1,165 @@
+﻿@model Ticket
+@{
+    ViewData["Title"] = "Re-Assign Ticket";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<style>
+    .vodiapicker {
+        display: none;
+    }
+
+    #a {
+        padding-left: 0px;
+    }
+
+        #a img,
+        .btn-select img {
+            width: 40px;
+        }
+
+        #a li {
+            list-style: none;
+            padding-top: 0px;
+            padding-bottom: 0px;
+        }
+
+            #a li:hover {
+                background-color: #F4F3F3;
+            }
+
+            #a li img {
+                margin: 5px;
+            }
+
+            #a li span,
+            .btn-select li span {
+                margin-left: 30px;
+            }
+    /* item list */
+    .b {
+        display: none;
+        width: 100%;
+        max-width: 350px;
+        box-shadow: 0 6px 12px rgba(0, 0, 0, .175);
+        border: 1px solid rgba(0, 0, 0, .15);
+        border-radius: 5px;
+        max-width: 100%;
+    }
+
+    .open {
+        display: block !important;
+    }
+
+    .btn-select {
+        width: 100%;
+        height: 34px;
+        border-radius: 5px;
+        background-color: #fff;
+        border: 1px solid #ccc;
+    }
+
+        .btn-select li {
+            list-style: none;
+            float: left;
+            padding-bottom: 0px;
+        }
+
+        .btn-select:hover li {
+            margin-left: 0px;
+        }
+
+        .btn-select:hover {
+            background-color: #F4F3F3;
+            border: 1px solid transparent;
+            box-shadow: inset 0 0px 0px 1px #ccc;
+        }
+
+        .btn-select:focus {
+            outline: none;
+        }
+
+    dl, ol, ul {
+        margin-top: 0;
+        margin-bottom: 0;
+    }
+</style>
+
+<div class="container">
+    <div class="col-md-12">
+        <div class="row">
+            <div class="col-md-8 offset-2">
+                <div class="card">
+                    <div class="card-body register-card-body">
+                        <form asp-action="AssignTicket" method="post">
+                            <input hidden asp-for="TicketID" />
+                           
+                            <label>Select Member</label>
+                            <span asp-validation-for="AssignedToEmployeeId" class="text-danger"></span>
+                            <select class="select2" id="mySelect" asp-for="AssignedToEmployeeId" style="width: 100%">
+                                @if (ViewBag.UsersWithPictures != null)
+                                {
+                                    foreach (var user in ViewBag.UsersWithPictures)
+                                    {
+                                        <option value="@user.Id" data-image="@user.PicturePath">
+                                            @user.FullName
+                                        </option>
+                                    }
+                                }
+           
+                            </select>
+                       
+
+                            <div class="row" style="padding-top:30px">
+                                <div class="col-3">
+                                    <input type="submit" class="btn btn-warning" value="Assign" />
+                                </div>
+                                <div class="col-4">
+                                    <a class="btn btn-primary" asp-action="Tickets">Back to Page</a>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <!-- /.form-box -->
+                </div><!-- /.card -->
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('.select2').select2({
+                templateResult: function (data) {
+                    if (!data.element) {
+                        return data.text;
+                    }
+                    var $element = $(data.element);
+                    var $wrapper = $('<span></span>');
+                    var $image = $('<img>');
+                    $image.attr('src', $element.data('image'));
+                    $image.attr('width', '30px');
+                    $image.attr('height', '30px');
+                    $wrapper.append($image);
+                    $wrapper.append(' ' + data.text);
+                    return $wrapper;
+                },
+                templateSelection: function (data) {
+                    if (!data.element) {
+                        return data.text;
+                    }
+                    var $element = $(data.element);
+                    var $wrapper = $('<span></span>');
+                    var $image = $('<img>');
+                    $image.attr('src', $element.data('image'));
+                    $image.attr('width', '30px');
+                    $image.attr('height', '30px');
+                    $wrapper.append($image);
+                    $wrapper.append(' ' + data.text);
+                    return $wrapper;
+                }
+            });
+        });
+    </script>
+}

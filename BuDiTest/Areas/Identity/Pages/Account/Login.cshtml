@@ -1,0 +1,80 @@
+﻿@page
+@model LoginModel
+
+@{
+    ViewData["Title"] = "Log in";
+    Layout = "~/Views/Shared/AdminLayout/_LayoutLogin.cshtml";
+}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- custom styling -->
+    <link rel="stylesheet" href="~/admin/assets/css/style.css">
+    <link rel="stylesheet" href="~/admin/assets/css/form.scss">
+    <!-- bootstrap  -->
+    <link rel="stylesheet" href="~/admin/assets/css/bootstrap.min.css">
+    <!-- icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+    <!-- fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@100;300;400;700;900&display=swap" rel="stylesheet">
+    <title>Document</title>
+</head>
+
+<body>
+    <div class="form-content">
+        <div class="form-inner">
+            <form class="login" id="account" method="post">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="mb-3">
+                    @*     <input type="text" placeholder="Username" class="form-control">*@
+                    <input asp-for="Input.Email" class="form-control" autocomplete="username" placeholder="Username" aria-required="true" required />
+                </div>
+                <span asp-validation-for="Input.Email" class="text-danger"></span>
+                <div class="mb-3">
+                    @* <input type="password" placeholder="Password" class="form-control">*@
+                    <input asp-for="Input.Password" class="form-control" autocomplete="current-password" placeholder="Password" aria-required="true" required />
+                </div>
+                <span asp-validation-for="Input.Password" class="text-danger"></span>
+                <div class="row col-12 " >
+                    <div >
+                        <button id="login-submit" type="submit" class="btn form-button">Login</button>
+                    </div>
+                    <div class="col-7">
+                        <div class="icheck-primary">
+                            <label asp-for="Input.RememberMe" class="form-label">
+                                <input class="form-check-input" asp-for="Input.RememberMe" />
+                                @Html.DisplayNameFor(m => m.Input.RememberMe)
+                            </label>
+                        </div>
+                    </div>
+                </div>
+               
+                <p class="mb-1 mt-2">
+                    <a id="forgot-password" asp-page="./ForgotPassword">Forgot your password?</a>
+                    @*<a id="SignIn" asp-page="./SignIn">Go And Sign In?</a>*@
+                </p>
+            </form>
+      
+        </div>
+
+    </div>
+
+
+
+
+    <script src="~/admin/assets/js/bootstrap.min.js"></script>
+</body>
+
+</html>
+
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
